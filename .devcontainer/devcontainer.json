@@ -1,8 +1,10 @@
-// See https://containers.dev/implementors/json_reference/ for configuration reference
 {
-	"name": "Coding Interview Backend Level 3",
-	"build": {
-		"dockerfile": "Dockerfile"
-	},
+  "name": "Coding Interview Backend Level 3",
+  "dockerComposeFile": ["../docker-compose.yml", "./docker-compose.override.yml"],
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "type=bind,source=${localWorkspaceFolder},target=/workspace,consistency=cached",
+  "postCreateCommand": "npm ci && npx prisma generate",
+  "forwardPorts": [3000],
   "remoteUser": "node"
 }

@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Item {
+  id    Int     @id @default(autoincrement())
+  name  String
+  price Float
+
+  @@map("item")
+}
+
+model History {
+  id        Int      @id @default(autoincrement())
+  action    String
+  entityType String  @map("entityType")
+  entityId  Int     @map("entityId")
+  userId    String? @map("userId")
+  payload   String?
+  createdAt DateTime @default(now()) @map("createdAt")
+
+  @@map("history")
+}
