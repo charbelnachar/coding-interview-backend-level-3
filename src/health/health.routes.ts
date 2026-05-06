@@ -26,14 +26,14 @@ export function createHealthRouter(healthChecks: HealthCheck[]): Router {
       })),
     );
 
-    const allOk = results.every((r) => r.ok);
-
+    let allOk = true;
+    let databaseOk = false;
     const checks: Record<string, string> = {};
     for (const r of results) {
+      if (!r.ok) allOk = false;
+      if (r.name === 'database') databaseOk = r.ok;
       checks[r.name] = r.ok ? 'ok' : 'error';
     }
-
-    const databaseOk = results.find((r) => r.name === 'database')?.ok ?? false;
 
     const body = {
       status: allOk ? 'ok' : 'error',

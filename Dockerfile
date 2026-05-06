@@ -6,6 +6,7 @@ WORKDIR /app
 RUN apk add --no-cache openssl
 
 COPY package*.json ./
+COPY prisma/schema.prisma ./prisma/schema.prisma
 RUN npm ci
 
 COPY tsconfig.json ./
@@ -13,7 +14,6 @@ COPY tsconfig.build.json ./
 COPY prisma/ ./prisma/
 COPY src/ ./src/
 
-RUN npx prisma generate
 RUN npx tsc -p tsconfig.build.json
 
 # Production stage

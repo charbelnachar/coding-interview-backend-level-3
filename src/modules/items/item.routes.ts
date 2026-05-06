@@ -22,7 +22,7 @@ export function createItemRouter(itemService: ItemService): Router {
 
   router.get('/items', async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const items = await itemService.findAll(req.user?.userId);
+      const items = await itemService.findAll();
       res.json(items);
     } catch (err) {
       next(err);
@@ -30,11 +30,12 @@ export function createItemRouter(itemService: ItemService): Router {
   });
 
   router.get(
-    '/items/:id',
+    '/item/:id',
     async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
       try {
         const id = Number.parseInt(req.params.id, 10);
-        const item = await itemService.findById(id, req.user?.userId);
+        if (Number.isNaN(id)) return next(new NotFoundException('Item', req.params.id));
+        const item = await itemService.findById(id);
         if (!item) {
           return next(new NotFoundException('Item', id));
         }
@@ -45,7 +46,7 @@ export function createItemRouter(itemService: ItemService): Router {
     },
   );
 
-  router.post('/items', async (req: Request, res: Response, next: NextFunction) => {
+  router.post('/item', async (req: Request, res: Response, next: NextFunction) => {
     try {
       const body = req.body ?? {};
       const errors = validateCreateItem(body);
@@ -63,10 +64,11 @@ export function createItemRouter(itemService: ItemService): Router {
   });
 
   router.put(
-    '/items/:id',
+    '/item/:id',
     async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
       try {
         const id = Number.parseInt(req.params.id, 10);
+        if (Number.isNaN(id)) return next(new NotFoundException('Item', req.params.id));
         const body = req.body ?? {};
         const errors = validateUpdateItem(body);
         if (errors.length > 0) {
@@ -88,10 +90,11 @@ export function createItemRouter(itemService: ItemService): Router {
   );
 
   router.delete(
-    '/items/:id',
+    '/item/:id',
     async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
       try {
         const id = Number.parseInt(req.params.id, 10);
+        if (Number.isNaN(id)) return next(new NotFoundException('Item', req.params.id));
         const deleted = await itemService.delete(id, req.user?.userId);
         if (!deleted) {
           return next(new NotFoundException('Item', id));

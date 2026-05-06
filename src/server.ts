@@ -50,6 +50,7 @@ export const initializeServer = async (): Promise<HapiServer> => {
   });
 
   const { default: request } = await import('supertest');
+  const agent = request(httpServer);
 
   const adapter = {
     inject: async (opts: {
@@ -59,7 +60,7 @@ export const initializeServer = async (): Promise<HapiServer> => {
       headers?: Record<string, string>;
     }) => {
       const method = opts.method.toLowerCase() as 'get' | 'post' | 'put' | 'delete' | 'patch';
-      let req = request(httpServer)[method](opts.url);
+      let req = agent[method](opts.url);
 
       if (opts.headers) {
         for (const [key, value] of Object.entries(opts.headers)) {

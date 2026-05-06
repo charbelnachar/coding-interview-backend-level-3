@@ -1,4 +1,4 @@
-import type { Item } from '@prisma/client';
+import { type Item, Prisma } from '@prisma/client';
 import type { IItemRepository } from '../../common/interfaces/item-repository.interface';
 import { prisma } from '../../database/db';
 
@@ -25,12 +25,12 @@ export class ItemRepository implements IItemRepository {
 
   async update(id: number, data: { name?: string; price?: number }): Promise<Item | null> {
     try {
-      return await prisma.item.update({
-        where: { id },
-        data,
-      });
-    } catch {
-      return null;
+      return await prisma.item.update({ where: { id }, data });
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+        return null;
+      }
+      throw err;
     }
   }
 
@@ -38,8 +38,11 @@ export class ItemRepository implements IItemRepository {
     try {
       await prisma.item.delete({ where: { id } });
       return true;
-    } catch {
-      return false;
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+        return false;
+      }
+      throw err;
     }
   }
 }

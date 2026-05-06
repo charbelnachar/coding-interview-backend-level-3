@@ -103,6 +103,13 @@ REST API for managing items with a full audit history log, built with Node.js, E
 | `.interface.ts` | TypeScript contract |
 | `.exception.ts` | Domain exception class |
 
+Test files use the `.test.ts` suffix following the Jest convention:
+
+| Pattern | Example |
+|---|---|
+| `<module>.<layer>.test.ts` | `item.service.test.ts`, `item.validator.test.ts` |
+| `<module>.routes.test.ts` | `item.routes.test.ts`, `health.routes.test.ts` |
+
 ### TypeScript naming
 
 | Construct | Convention | Example |
@@ -237,10 +244,10 @@ npm run db:seed
 | `GET` | `/ping` | Liveness check | 200 |
 | `GET` | `/health` | Health of all modules | 200 / 503 |
 | `GET` | `/items` | List all items | 200 |
-| `POST` | `/items` | Create an item | 201 / 400 |
-| `GET` | `/items/:id` | Get item by ID | 200 / 404 |
-| `PUT` | `/items/:id` | Update item by ID | 200 / 400 / 404 |
-| `DELETE` | `/items/:id` | Delete item by ID | 204 / 404 |
+| `POST` | `/item` | Create an item | 201 / 400 |
+| `GET` | `/item/:id` | Get item by ID | 200 / 404 |
+| `PUT` | `/item/:id` | Update item by ID | 200 / 400 / 404 |
+| `DELETE` | `/item/:id` | Delete item by ID | 204 / 404 |
 
 ### Health response
 
@@ -291,37 +298,3 @@ Git hooks (managed by **husky**):
 - **pre-commit** — runs `biome check --write` on staged files via `lint-staged`
 - **pre-push** — runs the full test suite (`npm run test:all`)
 
----
-
-## Project Audit
-
-### What was removed
-
-| Item | Reason |
-|------|--------|
-| `src/modules/auth/` | Auth moved to middleware; not a business module |
-| `src/common/middlewares/auth.middleware.ts` | Consolidated into `auth-middleware.ts` |
-| `src/common/middlewares/auth.factory.ts` | Consolidated into `auth-middleware.ts` |
-| `src/common/middlewares/auth.validator.ts` | Consolidated into `auth-middleware.ts` |
-| `.devcontainer/docker-compose.yml` | Now uses root `docker-compose.yml` + override |
-
-### What was added / reorganized
-
-| Item | Purpose |
-|------|---------|
-| `src/common/middlewares/auth-middleware.ts` | Single file: validator + factory + middleware |
-| `src/common/interfaces/validation-error.interface.ts` | Prevent cross-layer imports |
-| `.devcontainer/docker-compose.override.yml` (updated) | Dev-only overrides (builder target, sleep infinity) |
-| `.gitignore` (updated) | Added `.claude/`, cleaned up patterns |
-
-### Structure verification
-
-✅ **Middlewares** (2 files):
-- `auth-middleware.ts` — Auth validator + factory + middleware
-- `error-handler.middleware.ts` — Global error handling
-
-✅ **Modules** (2 folders):
-- `items/` — CRUD service + routes
-- `history/` — Audit log service
-
-✅ **No broken imports** — all tests pass (unit, integration, e2e)

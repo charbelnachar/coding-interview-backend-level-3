@@ -1,52 +1,39 @@
 import type { ValidationError } from '../../common/interfaces/validation-error.interface';
 
-/**
- * Validates the payload for creating a new item.
- *
- * Args:
- *   payload: The raw request body to validate.
- *
- * Returns:
- *   An array of ValidationError objects. Empty when the payload is valid.
- */
-export function validateCreateItem(payload: any): ValidationError[] {
+export function validateCreateItem(payload: unknown): ValidationError[] {
   const errors: ValidationError[] = [];
+  const p = payload as Record<string, unknown>;
 
-  if (payload.name === undefined || payload.name === null) {
+  if (p.name === undefined || p.name === null || p.name === '') {
     errors.push({ field: 'name', message: 'Field "name" is required' });
   }
 
-  if (payload.price === undefined || payload.price === null) {
+  if (p.price === undefined || p.price === null) {
     errors.push({ field: 'price', message: 'Field "price" is required' });
-  } else if (typeof payload.price === 'number' && payload.price < 0) {
+  } else if (typeof p.price !== 'number') {
+    errors.push({ field: 'price', message: 'Field "price" must be a number' });
+  } else if (p.price < 0) {
     errors.push({ field: 'price', message: 'Field "price" cannot be negative' });
   }
 
   return errors;
 }
 
-/**
- * Validates the payload for updating an existing item.
- *
- * Only fields that are present are validated. Missing fields are allowed
- * for partial updates.
- *
- * Args:
- *   payload: The raw request body to validate.
- *
- * Returns:
- *   An array of ValidationError objects. Empty when the payload is valid.
- */
-export function validateUpdateItem(payload: any): ValidationError[] {
+export function validateUpdateItem(payload: unknown): ValidationError[] {
   const errors: ValidationError[] = [];
+  const p = payload as Record<string, unknown>;
 
-  if (
-    payload.price !== undefined &&
-    payload.price !== null &&
-    typeof payload.price === 'number' &&
-    payload.price < 0
-  ) {
-    errors.push({ field: 'price', message: 'Field "price" cannot be negative' });
+  if (p.name === undefined && p.price === undefined) {
+    errors.push({ field: 'body', message: 'At least one field must be provided' });
+    return errors;
+  }
+
+  if (p.price !== undefined && p.price !== null) {
+    if (typeof p.price !== 'number') {
+      errors.push({ field: 'price', message: 'Field "price" must be a number' });
+    } else if (p.price < 0) {
+      errors.push({ field: 'price', message: 'Field "price" cannot be negative' });
+    }
   }
 
   return errors;

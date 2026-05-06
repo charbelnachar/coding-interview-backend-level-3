@@ -20,10 +20,8 @@ export class ItemService {
    * Returns:
    *   A promise that resolves to the full list of items.
    */
-  async findAll(userId?: string): Promise<Item[]> {
-    const items = await this.itemRepository.findAll();
-    await this.logger.addLog('GET_ALL', 'item', undefined, userId);
-    return items;
+  async findAll(): Promise<Item[]> {
+    return this.itemRepository.findAll();
   }
 
   /**
@@ -35,10 +33,8 @@ export class ItemService {
    * Returns:
    *   The matching item, or null when not found.
    */
-  async findById(id: number, userId?: string): Promise<Item | null> {
-    const item = await this.itemRepository.findById(id);
-    await this.logger.addLog('GET', 'item', id, userId);
-    return item;
+  async findById(id: number): Promise<Item | null> {
+    return this.itemRepository.findById(id);
   }
 
   /**
