@@ -1,13 +1,13 @@
 services:
   app:
     build:
-      context: ../
+      context: .
       dockerfile: ./Dockerfile
       target: builder
     command: sleep infinity
     volumes:
-      - ..:/workspace:cached
+      - .:/workspace:cached
     working_dir: /workspace
-    env_file: ../.env
+    env_file: .env
     environment:
       NODE_ENV: development

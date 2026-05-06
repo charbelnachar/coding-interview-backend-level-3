@@ -21,6 +21,7 @@
     "db:migrate": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",
     "db:seed": "ts-node src/database/seeds/seed.ts",
+    "postinstall": "prisma generate",
     "prepare": "husky"
   },
   "author": "El Dorado Dev Team",
