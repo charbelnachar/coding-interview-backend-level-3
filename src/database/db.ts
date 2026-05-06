@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { loadConfig } from '../config/index.js';
+import { loadConfig } from '../config';
 
 if (!process.env.DATABASE_URL) {
   const { db } = loadConfig();

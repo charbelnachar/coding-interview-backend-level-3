@@ -96,7 +96,7 @@ describe('ItemService', () => {
 
       const result = await itemService.delete(1);
       expect(result).toBe(true);
-      expect(mockLogger.addLog).toHaveBeenCalledWith('DELETE', 'item', 1);
+      expect(mockLogger.addLog).toHaveBeenCalledWith('DELETE', 'item', 1, undefined);
     });
 
     it('should return false and not log when item not found', async () => {
