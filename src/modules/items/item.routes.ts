@@ -30,7 +30,7 @@ export function createItemRouter(itemService: ItemService): Router {
   });
 
   router.get(
-    '/item/:id',
+    '/items/:id',
     async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
       try {
         const id = Number.parseInt(req.params.id, 10);
@@ -46,7 +46,7 @@ export function createItemRouter(itemService: ItemService): Router {
     },
   );
 
-  router.post('/item', async (req: Request, res: Response, next: NextFunction) => {
+  router.post('/items', async (req: Request, res: Response, next: NextFunction) => {
     try {
       const body = req.body ?? {};
       const errors = validateCreateItem(body);
@@ -64,7 +64,7 @@ export function createItemRouter(itemService: ItemService): Router {
   });
 
   router.put(
-    '/item/:id',
+    '/items/:id',
     async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
       try {
         const id = Number.parseInt(req.params.id, 10);
@@ -90,7 +90,7 @@ export function createItemRouter(itemService: ItemService): Router {
   );
 
   router.delete(
-    '/item/:id',
+    '/items/:id',
     async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
       try {
         const id = Number.parseInt(req.params.id, 10);

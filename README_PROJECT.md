@@ -244,10 +244,10 @@ npm run db:seed
 | `GET` | `/ping` | Liveness check | 200 |
 | `GET` | `/health` | Health of all modules | 200 / 503 |
 | `GET` | `/items` | List all items | 200 |
-| `POST` | `/item` | Create an item | 201 / 400 |
-| `GET` | `/item/:id` | Get item by ID | 200 / 404 |
-| `PUT` | `/item/:id` | Update item by ID | 200 / 400 / 404 |
-| `DELETE` | `/item/:id` | Delete item by ID | 204 / 404 |
+| `POST` | `/items` | Create an item | 201 / 400 |
+| `GET` | `/items/:id` | Get item by ID | 200 / 404 |
+| `PUT` | `/items/:id` | Update item by ID | 200 / 400 / 404 |
+| `DELETE` | `/items/:id` | Delete item by ID | 204 / 404 |
 
 ### Health response
 
